@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="popup.css">
+    <title>Code Analyzer</title>
+</head>
+<body>
+    <div id="app">
+        <div class="header">
+            <h2>Code Analyzer</h2>
+            <button id="settingsBtn" title="Settings">⚙️</button>
+        </div>
+        
+        <div class="content" id="mainContent">
+            <p class="description">Extracts and analyzes code from the current page (LeetCode, HackerRank, Codeforces) using AI.</p>
+            <button id="analyzeBtn" class="primary-btn">Analyze Code</button>
+            <div id="errorMsg" class="error-msg hidden"></div>
+        </div>
+
+        <div class="loading hidden" id="loadingState">
+            <div class="spinner"></div>
+            <p>Analyzing code...</p>
+        </div>
+
+        <div class="results hidden" id="resultsState">
+            <div class="result-section">
+                <h3>Time & Space Complexity</h3>
+                <div id="complexityResult" class="result-content markdown-body"></div>
+            </div>
+            
+            <div class="result-section">
+                <h3>Optimization Tips</h3>
+                <div id="optimizationResult" class="result-content markdown-body"></div>
+            </div>
+
+            <div class="result-section">
+                <h3>Similar Questions</h3>
+                <div id="similarResult" class="result-content markdown-body"></div>
+            </div>
+            
+            <button id="backBtn" class="secondary-btn">New Analysis</button>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>

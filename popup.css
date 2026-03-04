@@ -1,0 +1,222 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+body {
+    width: 350px;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #0f172a;
+    color: #f8fafc;
+}
+
+#app {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #334155;
+    padding-bottom: 12px;
+}
+
+h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #f8fafc;
+}
+
+h3 {
+    margin: 0 0 8px 0;
+    font-size: 0.95rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+button {
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+#settingsBtn {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    color: #94a3b8;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+#settingsBtn:hover {
+    background-color: #1e293b;
+    color: #f8fafc;
+}
+
+.description {
+    font-size: 0.9rem;
+    color: #cbd5e1;
+    margin-top: 0;
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+.primary-btn {
+    width: 100%;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.primary-btn:hover {
+    background-color: #2563eb;
+}
+
+.primary-btn:disabled {
+    background-color: #475569;
+    cursor: not-allowed;
+    color: #94a3b8;
+}
+
+.secondary-btn {
+    width: 100%;
+    background-color: transparent;
+    color: #cbd5e1;
+    border: 1px solid #475569;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: 500;
+    margin-top: 16px;
+}
+
+.secondary-btn:hover {
+    background-color: #1e293b;
+    color: white;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.error-msg {
+    color: #ef4444;
+    font-size: 0.85rem;
+    margin-top: 12px;
+    padding: 10px;
+    background-color: rgba(239, 68, 68, 0.1);
+    border-radius: 4px;
+    border-left: 3px solid #ef4444;
+    word-break: break-word;
+}
+
+/* Loading State */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+    gap: 16px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(59, 130, 246, 0.3);
+    border-radius: 50%;
+    border-top-color: #3b82f6;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading p {
+    color: #94a3b8;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* Results State */
+.results {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.results::-webkit-scrollbar {
+    width: 6px;
+}
+
+.results::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+
+.results::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 3px;
+}
+
+.result-section {
+    background-color: #1e293b;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+}
+
+.result-content {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #e2e8f0;
+}
+
+/* Markdown styling */
+.markdown-body p { margin-top: 0; margin-bottom: 8px; }
+.markdown-body p:last-child { margin-bottom: 0; }
+.markdown-body code { 
+    background-color: #0f172a; 
+    padding: 2px 4px; 
+    border-radius: 4px; 
+    font-family: monospace; 
+    font-size: 0.85em;
+    color: #38bdf8;
+}
+.markdown-body pre {
+    background-color: #0f172a;
+    padding: 8px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+.markdown-body pre code {
+    background-color: transparent;
+    padding: 0;
+    color: #e2e8f0;
+}
+.markdown-body ul, .markdown-body ol {
+    margin-top: 0;
+    margin-bottom: 8px;
+    padding-left: 20px;
+}
+.markdown-body a {
+    color: #60a5fa;
+    text-decoration: none;
+}
+.markdown-body a:hover {
+    text-decoration: underline;
+}
