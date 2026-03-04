@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "Code Analyzer",
+  "version": "1.0",
+  "description": "Analyzes code for time complexity, optimizations, and similar questions.",
+  "permissions": ["activeTab", "storage", "scripting"],
+  "host_permissions": [
+    "*://leetcode.com/*",
+    "*://*.hackerrank.com/*",
+    "*://codeforces.com/*",
+    "https://generativelanguage.googleapis.com/*"
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://leetcode.com/*",
+        "*://*.hackerrank.com/*",
+        "*://codeforces.com/*"
+      ],
+      "js": ["content.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "48": "icon48.png"
+    }
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "icons": {
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "codeanalyzer@shubhrit.example.com",
+      "strict_min_version": "109.0"
+    }
+  }
+}
