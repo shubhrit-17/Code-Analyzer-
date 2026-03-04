@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Code Analyzer Settings</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        body { 
+            font-family: 'Inter', sans-serif; 
+            padding: 40px; 
+            background-color: #0f172a; 
+            color: #f8fafc; 
+            display: flex;
+            justify-content: center;
+        }
+        .container { 
+            width: 100%;
+            max-width: 450px; 
+            background: #1e293b; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); 
+            border: 1px solid #334155;
+        }
+        h1 { 
+            font-size: 1.5rem; 
+            margin-top: 0; 
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 500; 
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+        input[type="text"] { 
+            width: 100%; 
+            padding: 10px 12px; 
+            margin-bottom: 20px; 
+            background: #0f172a;
+            border: 1px solid #475569; 
+            border-radius: 6px; 
+            box-sizing: border-box; 
+            color: #f8fafc;
+            font-family: inherit;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+        button { 
+            background-color: #3b82f6; 
+            color: white; 
+            border: none; 
+            padding: 12px 20px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: 500; 
+            font-size: 1rem;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+        button:hover { 
+            background-color: #2563eb; 
+        }
+        #status { 
+            margin-top: 15px; 
+            color: #4ade80; 
+            font-size: 0.9rem; 
+            text-align: center;
+            min-height: 20px;
+        }
+        .help-text {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Settings</h1>
+        <p class="help-text">
+            To analyze your code, this extension uses the Google Gemini API. You can get a free API key from Google AI Studio and paste it below.
+        </p>
+        <label for="apiKey">Google Gemini API Key</label>
+        <input type="text" id="apiKey" placeholder="AIzaSy..." spellcheck="false">
+        <button id="saveButton">Save Settings</button>
+        <div id="status"></div>
+    </div>
+    <script src="options.js"></script>
+</body>
+</html>
