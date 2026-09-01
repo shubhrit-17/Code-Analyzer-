@@ -36,10 +36,23 @@ async function callGeminiAPI(apiKey, code, platform, language) {
     
     Return EXACTLY a JSON object with this shape (no markdown wrapping, just the raw JSON object string):
     {
-      "complexity": "Detailed explanation of Time and Space complexity formatted in concise markdown. Mention exactly O(...) notation.",
-      "optimization": "Bullet points discussing how to optimize the code. Formatted in markdown.",
-      "similarQuestions": "List 2-4 similar coding questions (with platform Links if possible) that require the same logic or pattern. Formatted in markdown."
+      "timeComplexity": "O(n^2)",
+      "spaceComplexity": "O(1)",
+      "summary": "Explain how the code works and justify the time and space complexity.",
+      "bottleneck": {
+        "lines": "14-15",
+        "codeSnippet": "for (...) { ... }",
+        "explanation": "O(n^2) impact due to nested iteration.",
+        "hints": "Try using a Hash Map to avoid the inner loop."
+      },
+      "isOptimized": false,
+      "optimizedCode": "function optimized(arr) { ... }",
+      "similarQuestions": [
+        {"title": "Two Sum", "link": "https://leetcode.com/problems/two-sum/"}
+      ]
     }
+    
+    If the code is already perfectly optimized, set isOptimized to true and leave optimizedCode empty. Make the values reflect the actual analysis of the provided code.
     
     Code to analyze:
     \`\`\`
