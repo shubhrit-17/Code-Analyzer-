@@ -2,17 +2,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainContent = document.getElementById('mainContent');
     const loadingState = document.getElementById('loadingState');
     const resultsState = document.getElementById('resultsState');
-
     const analyzeBtn = document.getElementById('analyzeBtn');
     const settingsBtn = document.getElementById('settingsBtn');
     const backBtn = document.getElementById('backBtn');
     const errorMsg = document.getElementById('errorMsg');
 
+    // UI elements for results
+    const timeValue = document.getElementById('timeValue');
+    const spaceValue = document.getElementById('spaceValue');
+    const timeRing = document.querySelector('.time-ring');
+    const spaceRing = document.querySelector('.space-ring');
+    
+    const summaryText = document.getElementById('summaryText');
+    const bottleneckCode = document.getElementById('bottleneckCode');
+    const bottleneckWarning = document.getElementById('bottleneckWarning');
+    const bottleneckHints = document.getElementById('bottleneckHints');
+    
+    const optimizeBtn = document.getElementById('optimizeBtn');
+    const alreadyOptimizedMsg = document.getElementById('alreadyOptimizedMsg');
+    const optimizedCodeContainer = document.getElementById('optimizedCodeContainer');
+    const optimizedCode = document.getElementById('optimizedCode');
+    
+    const similarQuestionsList = document.getElementById('similarQuestionsList');
+
     // Check API Key
     browser.storage.local.get(['geminiApiKey']).then((result) => {
         if (!result.geminiApiKey) {
-            showError("API Key is missing. Please click the ⚙️ icon to set it up.");
-            analyzeBtn.disabled = true;
+            showError("API Key is missing. Please click the gear icon to set it up.");
         }
     });
 
@@ -20,15 +36,24 @@ document.addEventListener('DOMContentLoaded', () => {
         browser.runtime.openOptionsPage();
     });
 
-    backBtn.addEventListener('click', () => {
-        resultsState.classList.add('hidden');
-        mainContent.classList.remove('hidden');
-        errorMsg.classList.add('hidden');
-    });
+    if (backBtn) {
+        backBtn.addEventListener('click', () => {
+            resultsState.classList.add('hidden');
+            mainContent.classList.remove('hidden');
+            errorMsg.classList.add('hidden');
+        });
+    }
+
+    if (optimizeBtn) {
+        optimizeBtn.addEventListener('click', () => {
+            optimizedCodeContainer.classList.toggle('hidden');
+        });
+    }
 
     analyzeBtn.addEventListener('click', () => {
         errorMsg.classList.add('hidden');
         mainContent.classList.add('hidden');
+        resultsState.classList.add('hidden');
         loadingState.classList.remove('hidden');
 
         // Get the active tab
@@ -38,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Send message to content script to extract code
             browser.tabs.sendMessage(activeTab.id, { action: "extractCode" }).then(response => {
                 if (!response || !response.code) {
-                    showError("Could not find any code. Make sure you are on a supported coding platform and the code editor is visible.");
+                    showError("Could not find any code. Make sure you are on a supported coding platform.");
                     return;
                 }
 
@@ -79,33 +104,58 @@ document.addEventListener('DOMContentLoaded', () => {
         loadingState.classList.add('hidden');
         resultsState.classList.remove('hidden');
 
-        document.getElementById('complexityResult').innerHTML = parseMarkdown(data.complexity || "No complexity data provided.");
-        document.getElementById('optimizationResult').innerHTML = parseMarkdown(data.optimization || "No optimization tips provided.");
-        document.getElementById('similarResult').innerHTML = parseMarkdown(data.similarQuestions || "No similar questions provided.");
-    }
+        // Update Time & Space
+        timeValue.textContent = data.timeComplexity || "O(?)";
+        spaceValue.textContent = data.spaceComplexity || "O(?)";
 
-    function parseMarkdown(text) {
-        if (!text) return "";
-        let html = text;
-        // Code block
-        html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
-        html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
-        // Bold
-        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        // Inline code
-        html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-        // Links
-        html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
-        // Bullet points (simple)
-        html = html.replace(/^\* (.*)$/gm, '<ul><li>$1</li></ul>');
-        html = html.replace(/<\/ul>\n<ul>/g, ''); // merge adjacent lists
-        // Numbered lists
-        html = html.replace(/^[0-9]+\. (.*)$/gm, '<ol><li>$1</li></ol>');
-        html = html.replace(/<\/ol>\n<ol>/g, '');
-        // New lines
-        html = html.replace(/\n\n/g, '</p><p>');
-        html = html.replace(/\n/g, '<br>');
+        const isTimeBad = (data.timeComplexity || "").includes("^2") || (data.timeComplexity || "").includes("^3") || (data.timeComplexity || "").includes("2^") || (data.timeComplexity || "").includes("!");
+        timeRing.style.borderColor = isTimeBad ? "var(--error)" : "var(--success)";
+        
+        const isSpaceBad = (data.spaceComplexity || "").includes("n");
+        spaceRing.style.borderColor = isSpaceBad ? "var(--error)" : "var(--success)";
 
-        return `<p>${html}</p>`;
+        // Update Summary
+        summaryText.textContent = data.summary || "No summary provided.";
+
+        // Update Bottleneck
+        if (data.bottleneck) {
+            const codeLines = data.bottleneck.codeSnippet ? data.bottleneck.codeSnippet.split('\n') : [];
+            let highlightedHTML = "";
+            codeLines.forEach(line => {
+                highlightedHTML += `<span class="highlight-line">${line}</span>\n`;
+            });
+            bottleneckCode.innerHTML = highlightedHTML;
+            bottleneckWarning.textContent = `Lines ${data.bottleneck.lines || '?'}: ${data.bottleneck.explanation || 'Review for optimizations.'}`;
+            bottleneckHints.textContent = data.bottleneck.hints || "No hints available.";
+        } else {
+            bottleneckCode.innerHTML = "";
+            bottleneckWarning.textContent = "No specific bottleneck identified.";
+            bottleneckHints.textContent = "";
+        }
+
+        // Update Optimization Section
+        if (data.isOptimized) {
+            optimizeBtn.classList.add('hidden');
+            alreadyOptimizedMsg.classList.remove('hidden');
+            optimizedCodeContainer.classList.add('hidden');
+        } else {
+            optimizeBtn.classList.remove('hidden');
+            alreadyOptimizedMsg.classList.add('hidden');
+            optimizedCodeContainer.classList.add('hidden'); // hidden by default until clicked
+            optimizedCode.textContent = data.optimizedCode || "// No optimized code provided.";
+        }
+
+        // Update Similar Questions
+        similarQuestionsList.innerHTML = "";
+        if (data.similarQuestions && Array.isArray(data.similarQuestions)) {
+            data.similarQuestions.forEach(q => {
+                const a = document.createElement('a');
+                a.className = 'question-link';
+                a.href = q.link;
+                a.target = "_blank";
+                a.textContent = q.title;
+                similarQuestionsList.appendChild(a);
+            });
+        }
     }
 });
