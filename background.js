@@ -29,7 +29,7 @@ async function getApiKey() {
 }
 
 async function callGeminiAPI(apiKey, code, platform, language) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
 
     const prompt = `You are an expert AI software engineer analyzing code for platforms like LeetCode, HackerRank, and Codeforces.
     Please analyze the following code. The platform is ${platform} and language is ${language}.
@@ -72,11 +72,20 @@ async function callGeminiAPI(apiKey, code, platform, language) {
 
     const data = await response.json();
     try {
-        const contentStr = data.candidates[0].content.parts[0].text;
+        let contentStr = data.candidates[0].content.parts[0].text;
+
+        // Make parsing completely bulletproof by finding the start and end of the JSON object
+        const firstBrace = contentStr.indexOf('{');
+        const lastBrace = contentStr.lastIndexOf('}');
+
+        if (firstBrace !== -1 && lastBrace !== -1) {
+            contentStr = contentStr.substring(firstBrace, lastBrace + 1);
+        }
+
         const parsedData = JSON.parse(contentStr);
         return parsedData;
     } catch (e) {
-        console.error("Failed to parse response:", data);
+        console.error("Failed to parse response:", data, e);
         throw new Error("Invalid response from Gemini (could not parse as JSON)");
     }
 }
